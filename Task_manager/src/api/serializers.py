@@ -17,19 +17,6 @@ class UserSerializer(serializers.ModelSerializer):
         return User
 
 
-class GetUserserializer(serializers.ModelSerializer):
-    avatar_url = serializers.SerializerMethodField()
-
-    class Meta:
-        model = User
-        fields = ('email','username','date_joined','twitter_name','avatar_url')
-
-    def get_avatar_url(self, User):
-        request = self.context.get('request')
-        avatar_url = User.avatar.url
-        return request.build_absolute_uri(avatar_url)
-
-
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task_List

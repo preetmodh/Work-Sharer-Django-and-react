@@ -9,9 +9,7 @@ class User(AbstractUser):
         max_length=254,
     )
     username = models.CharField(max_length=20,unique=True,null=True)
-    date_joined = models.DateTimeField(auto_now_add=True)
-    twitter_name = models.CharField(max_length=15,blank=True)
-    avatar =models.ImageField(upload_to='images/',default='default.png')
+    
 
 class Task_List(models.Model):
     task_doer = models.ForeignKey(User, on_delete=models.CASCADE , related_name="Doer")
@@ -20,8 +18,6 @@ class Task_List(models.Model):
     task_completed = models.BooleanField(default=False)
     task_created = models.DateTimeField(auto_now_add=True)
     task_duedate = models.DateTimeField(default=datetime.now())
-    task_accepted = models.BooleanField(default=True)
-    task_sender = models.CharField(max_length=20, blank=True)
 
     def __str__(self):
 	    return self.task_title

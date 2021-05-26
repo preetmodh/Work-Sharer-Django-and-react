@@ -20,6 +20,7 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import Button from '@material-ui/core/Button';
 import MailIcon from '@material-ui/icons/Mail';
 import Container from '@material-ui/core/Container';
+import Maketask from "./create.js"
 
 const drawerWidth = 200;
 
@@ -84,12 +85,9 @@ export default function Home(){
    const classes = useStyles(); 
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const [showAll, setAll] = useState(true);
   const [showPending, setPending] = useState(false);
+  const [showCompleted,setCompleted] = useState(false)
   const [showCreate, setCreate] = useState(false);
-  const [showIncoming, setIncoming] = useState(false);
-  const [showSendtask, setSendtask] = useState(false);
-  const [showaccepted, setaccepted] = useState('True');
   const [value, setValue] = useState([])
   const x=localStorage.getItem('token');
 
@@ -105,14 +103,13 @@ export default function Home(){
     useEffect(() => {
         const interval = setInterval(() => {
             getvalue();
-        }, 1000);
+        }, 750);
         return () => clearInterval(interval);
       }, [getvalue]);
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
     function getvalue() {
         axios.get(`http://127.0.0.1:8000/api/task`, {
-            params:{accepted:showaccepted},
             headers: {
               'Authorization': `token ${x}`,
             }
@@ -139,6 +136,8 @@ export default function Home(){
 
     
     }
+
+
     const values=[]
     for (var i=0;i<value.length;i++){
         for (var j=0;j<value[i].length;j++){
@@ -156,15 +155,25 @@ export default function Home(){
                     )
                 }
             }
-            else{
+            else if (showCompleted){
+              if(value[i][j].task_completed){
                 values.push(
-                    <div key={value[i][j].id} className="data">
-                        <h2>Title: {value[i][j].task_title}</h2>
-                        <h3>Description: {value[i][j].task_description}</h3> 
-                        <hr/>
-                    </div>
-                )
-
+                  <div key={value[i][j].id} className="data">
+                      <h2>Title: {value[i][j].task_title}</h2>
+                      <h3>Description: {value[i][j].task_description}</h3> 
+                      <hr/>
+                  </div>
+              )
+              }
+            }
+            else{
+              values.push(
+                <div key={value[i][j].id} className="data">
+                    <h2>Title: {value[i][j].task_title}</h2>
+                    <h3>Description: {value[i][j].task_description}</h3> 
+                    <hr/>
+                </div>
+              )
             }
             
         }    
@@ -174,21 +183,32 @@ export default function Home(){
     }
 
     function setdiv(props){
-        /* console.log(props) */
+        console.log(props)
+        setCreate(false)
         if (props===2){
                 setPending(true)
-                setaccepted("True")
+                setCompleted(false)
+                
         }
         else if(props===0){
             setPending(false)
-            setaccepted("True")
+            setCompleted(false)
+            
         }
         else if (props===3){
             setPending(false)
-            setaccepted("False")
+            setCompleted(true)
+            
     }
-        
+    else if (props===1){
+      setCreate(true)
     }
+    else if (props===4){
+      logout()
+    }
+    }
+
+    
 
 
     return(
@@ -235,7 +255,7 @@ export default function Home(){
         </div>
         <Divider />
         <List>
-          {['All Task','Create Task', 'Pending', 'Incoming', 'Send Task'].map((text, index) => (
+          {['All Task','Create Task', 'Pending','Completed','Logout'].map((text, index) => (
             <ListItem button key={text} component="a" onClick={()=>setdiv(index)} >
               <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
               <ListItemText primary={text} />
@@ -243,14 +263,6 @@ export default function Home(){
           ))}
         </List>
         <Divider />
-        {/* <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List> */}
       </Drawer>
       <main
         className={clsx(classes.content, {
@@ -258,19 +270,19 @@ export default function Home(){
         })}
       >
         <div className={classes.drawerHeader} />
-        <div id="data">
+        { <div id="data">
             <React.Fragment>
                 <CssBaseline />
                 <Container maxWidth="lg">
-                    <Typography component="div" id ="All" style={{ display: showAll ? 'block' : 'none',backgroundColor: '#FFFFFF', height: '100vh' }} >
+                    <Typography component="div" id ="All" style={{backgroundColor: '#FFFFFF', height: '100vh' }} >
                     <h1 style={{fontSize: 50}}>UserName: {localStorage.getItem('name')}</h1>
                     <div className="datas">
-                        {values}
+                       {showCreate ? <Maketask/>:values}
                     </div>
                     </Typography>
                 </Container>
             </React.Fragment>
-        </div>
+        </div> }
         
       </main>
     </div>
