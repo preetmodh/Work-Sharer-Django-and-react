@@ -20,7 +20,8 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import Button from '@material-ui/core/Button';
 import MailIcon from '@material-ui/icons/Mail';
 import Container from '@material-ui/core/Container';
-import Maketask from "./create.js"
+import Maketask from "./create.js";
+import Showtask from "./show.js";
 
 const drawerWidth = 200;
 
@@ -82,14 +83,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Home(){
-   const classes = useStyles(); 
+  const classes = useStyles(); 
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const [showPending, setPending] = useState(false);
-  const [showCompleted,setCompleted] = useState(false)
+  const [param, setParam] = useState(0);
   const [showCreate, setCreate] = useState(false);
-  const [value, setValue] = useState([])
-  const x=localStorage.getItem('token');
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -99,108 +97,14 @@ export default function Home(){
     setOpen(false);
   };
     
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            getvalue();
-        }, 750);
-        return () => clearInterval(interval);
-      }, [getvalue]);
-
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    function getvalue() {
-        axios.get(`http://127.0.0.1:8000/api/task`, {
-            headers: {
-              'Authorization': `token ${x}`,
-            }
-    }).then((res) => {
-          setValue([])
-          setValue(value => [...value, res.data])
-          /* setValue(value.concat(res.data)) */
-    }).catch((error) => {
-            if (error.response){
-  
-      alert("You are not logged in")
-      
-      }else if(error.request){
-      
-        alert("You are not logged in")
-      
-      }else if(error.message){
-      
-        alert("You are not logged in")
-      
-      }
-      window.location.replace('/login')
-  })
-
-    
-    }
-
-
-    const values=[]
-    for (var i=0;i<value.length;i++){
-        for (var j=0;j<value[i].length;j++){
-            
-            if(showPending){
-                if(value[i][j].task_completed){
-                }
-                else{
-                    values.push(
-                        <div key={value[i][j].id} className="data">
-                            <h2>Title: {value[i][j].task_title}</h2>
-                            <h3>Description: {value[i][j].task_description}</h3> 
-                            <hr/>
-                        </div>
-                    )
-                }
-            }
-            else if (showCompleted){
-              if(value[i][j].task_completed){
-                values.push(
-                  <div key={value[i][j].id} className="data">
-                      <h2>Title: {value[i][j].task_title}</h2>
-                      <h3>Description: {value[i][j].task_description}</h3> 
-                      <hr/>
-                  </div>
-              )
-              }
-            }
-            else{
-              values.push(
-                <div key={value[i][j].id} className="data">
-                    <h2>Title: {value[i][j].task_title}</h2>
-                    <h3>Description: {value[i][j].task_description}</h3> 
-                    <hr/>
-                </div>
-              )
-            }
-            
-        }    
-    }
     function logout(){
         window.location.replace('/logout')
     }
 
     function setdiv(props){
-        console.log(props)
-        setCreate(false)
-        if (props===2){
-                setPending(true)
-                setCompleted(false)
-                
-        }
-        else if(props===0){
-            setPending(false)
-            setCompleted(false)
-            
-        }
-        else if (props===3){
-            setPending(false)
-            setCompleted(true)
-            
-    }
-    else if (props===1){
+      setParam(props)
+      setCreate(false)
+    if (props===1){
       setCreate(true)
     }
     else if (props===4){
@@ -277,7 +181,7 @@ export default function Home(){
                     <Typography component="div" id ="All" style={{backgroundColor: '#FFFFFF', height: '100vh' }} >
                     <h1 style={{fontSize: 50}}>UserName: {localStorage.getItem('name')}</h1>
                     <div className="datas">
-                       {showCreate ? <Maketask/>:values}
+                       {showCreate ? <Maketask/>:<Showtask>{param}</Showtask>}
                     </div>
                     </Typography>
                 </Container>

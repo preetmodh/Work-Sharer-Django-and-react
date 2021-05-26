@@ -115,11 +115,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+
+
+TIME_ZONE = 'Asia/Calcutta'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 
@@ -139,10 +141,11 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',  # <-- And here
     ],
+  
 }
 
 
-TIME_ZONE = 'Asia/Calcutta'
+
 
 CORS_ALLOW_ALL_ORIGINS=True
 CSRF_TRUSTED_ORIGINS = ['localhost:3000']

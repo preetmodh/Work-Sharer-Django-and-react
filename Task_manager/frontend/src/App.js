@@ -9,6 +9,7 @@ import Register from "./components/register"
 import Login from "./components/login"
 import Home from "./components/home"
 import Logout from './components/logout';
+import "./assets/styles.css";
 
 function App() {
   return (
