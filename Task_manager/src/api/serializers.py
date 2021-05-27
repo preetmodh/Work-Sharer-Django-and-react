@@ -18,8 +18,9 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
+    task_duedate=serializers.DateField(format="%d-%m-%Y",input_formats=['%d-%m-%Y',])
     class Meta:
         model = Task_List
-        fields = '__all__'
+        fields = fields = ['id','task_title', 'task_description', 'task_completed', 'task_duedate']
 
         

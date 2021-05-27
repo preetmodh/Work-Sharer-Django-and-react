@@ -22,15 +22,17 @@ export default function Maketask(){
 
     function newtask(){
         console.log(task_duedate,x)
-        axios.post('http://127.0.0.1:8000/api/task', {
-            task_title: task_title,
-            task_description:task_description,
-            task_duedate:task_duedate,
-            headers: { 
-                'Authorization': `token ${x}`,
-              }
-      },
-      ).then((response) => {
+        const body = {
+          task_title: task_title,
+          task_description:task_description,
+          task_duedate:task_duedate,
+          
+    };
+        axios.post('http://127.0.0.1:8000/api/task', body,{
+      headers: { 
+        'Authorization': `token ${x}`,
+      }
+    }).then((response) => {
         if (response.status===201){
           alert("task created")
           window.location.replace('/home')
@@ -40,16 +42,18 @@ export default function Maketask(){
         }
         console.log(response);
       }, (error) => {
+        
         if (error.response){
+          console.log(error.response)
 
           alert("Invalid entry")
           
           }else if(error.request){
-          
+            console.log(error.request)
             alert("Invalid entry")
           
           }else if(error.message){
-          
+            console.log(error.message)
             alert("Invalid entry")
           
           }
@@ -82,6 +86,7 @@ export default function Maketask(){
                 defaultValue=""
                 onChange={event => setdue(event.target.value)}
             />
+            
             <br/>
             <br/>
             <Button

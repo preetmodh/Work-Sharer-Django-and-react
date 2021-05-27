@@ -135,7 +135,7 @@ export default function Showtask(param){
         else{
             
             values.push(
-                <div className="card text-left" key={value[i][j].id}>
+                <div className="card text-left" key={value[i][j].id} onclick={event => console.log(event)}>
                     <div className="row">
                         <div className="col-10">
 

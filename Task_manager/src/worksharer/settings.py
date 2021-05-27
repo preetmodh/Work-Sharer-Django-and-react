@@ -26,7 +26,7 @@ SECRET_KEY = 'k)k==bcnm_)4*79wqf8lo7mpkq*@053-v1q1x#-(f@66h2)k7q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -123,7 +123,7 @@ USE_I18N = True
 
 USE_L10N = False
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -141,7 +141,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',  # <-- And here
     ],
-  
+    'DATETIME_FORMAT' : '%d-%m-%Y %H:%M:%S'
 }
 
 
